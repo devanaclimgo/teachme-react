@@ -23,7 +23,7 @@ function App() {
     <div className="content">
       <div className="box-home">
         <span>Olá, eu sou o</span>
-        <h1>teach.me</h1>
+        <h1>teach<span>.me</span></h1>
         <p>Estou aqui para te ajudar nos seus estudos.</p>
         <p>Selecione um dos tópicos sugeridos ao lado ou digite um tópico que deseja estudar para começarmos</p>
       </div>
