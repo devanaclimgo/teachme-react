@@ -1,38 +1,43 @@
+import { useState } from "react"
 import { ItemSuggestion } from "./components/ItemSuggestion"
 
+type ProgressType = 'pending' | 'started' | 'done'
+
 function App() {
+  const [progress, setProgress] = useState<ProgressType>('pending')
+
   return (
     <>
       <div className="container">
-    <div className="sidebar">
-      <details open className="suggestion">
-        <summary>Tópicos Sugeridos</summary>
-        <ItemSuggestion title="HTML"/>
-        <ItemSuggestion title="CSS"/>
-        <ItemSuggestion title="Javascript"/>
-        <ItemSuggestion title="Typescript"/>
-      </details>
+        <div className="sidebar">
+          <details open className="suggestion">
+            <summary>Tópicos Sugeridos</summary>
+            <ItemSuggestion title="HTML" />
+            <ItemSuggestion title="CSS" />
+            <ItemSuggestion title="Javascript" />
+            <ItemSuggestion title="Typescript" />
+          </details>
 
-      <details open className="historic">
-        <summary>Histórico</summary>
-        <ItemSuggestion title="Java"/>
-        <ItemSuggestion title="PHP"/>
-      </details>
-    </div>
+          <details open className="historic">
+            <summary>Histórico</summary>
+            <ItemSuggestion title="Java" />
+            <ItemSuggestion title="PHP" />
+          </details>
+        </div>
 
-    <div className="content">
-      <div className="box-home">
-        <span>Olá, eu sou o</span>
-        <h1>teach<span>.me</span></h1>
-        <p>Estou aqui para te ajudar nos seus estudos.</p>
-        <p>Selecione um dos tópicos sugeridos ao lado ou digite um tópico que deseja estudar para começarmos</p>
-      </div>
-      <div className="box-input">
-        <textarea placeholder="Insira o texto que deseja estudar."></textarea>
-        <button>Enviar Pergunta</button>
-      </div>
+        <div className="content">
+          {progress === 'pending' && (
+            <div className="box-home">
+              <span>Olá, eu sou o</span>
+              <h1>teach<span>.me</span></h1>
+              <p>Estou aqui para te ajudar nos seus estudos.</p>
+              <p>Selecione um dos tópicos sugeridos ao lado ou digite um tópico que deseja estudar para começarmos</p>
+            </div>
+            )
+          }
 
-      {/* <div className="box-chat">
+        {progress !== 'pending' && (
+        <div className="box-chat">
         <h1>Você está estudando sobre <span>HTML</span></h1>
 
         <div className="question">
@@ -73,13 +78,19 @@ function App() {
             <button>Estudar novo tópico</button>
           </div>
         </div>
-      </div> */}
+      </div>
+        )}
 
-      <footer className="box-footer">
-        <p>teach<span>.me</span></p>
-      </footer>
-    </div>
-  </div>
+            <div className="box-input">
+              <textarea placeholder="Insira o texto que deseja estudar."></textarea>
+              <button>Enviar Pergunta</button>
+            </div>
+
+          <footer className="box-footer">
+            <p>teach<span>.me</span></p>
+          </footer>
+        </div>
+      </div>
     </>
   )
 }
