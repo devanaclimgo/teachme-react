@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { ItemSuggestion } from "./components/ItemSuggestion"
+import { getHistoric, setHistoric } from "./storage/historic"
 
 type ProgressType = 'pending' | 'started' | 'done'
 
@@ -22,6 +23,7 @@ function App() {
     setTextarea('')
 
     if (progress === 'pending') {
+      setHistoric(message)
       setChat(text => [...text, textarea])
       setChat(text => [...text, 'Aqui será a pergunta gerada por uma IA.'])
 
@@ -49,8 +51,12 @@ function App() {
 
           <details open className="historic">
             <summary>Histórico</summary>
-            <ItemSuggestion title="Java" onClick={() => setTextarea('Java')}/>
-            <ItemSuggestion title="PHP" onClick={() => setTextarea('PHP')}/>
+            {
+              getHistoric().map(item => (
+                <ItemSuggestion title={item} onClick={() => setTextarea(item)}/>
+              ))
+            }
+
           </details>
         </div>
 
