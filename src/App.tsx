@@ -35,24 +35,22 @@ function App() {
     setProgress('done')
   }
 
-  console.log(chat)
-
   return (
     <>
       <div className="container">
         <div className="sidebar">
           <details open className="suggestion">
             <summary>Tópicos Sugeridos</summary>
-            <ItemSuggestion title="HTML" />
-            <ItemSuggestion title="CSS" />
-            <ItemSuggestion title="Javascript" />
-            <ItemSuggestion title="Typescript" />
+            <ItemSuggestion title="HTML" onClick={() => setTextarea('HTML')}/>
+            <ItemSuggestion title="CSS" onClick={() => setTextarea('CSS')}/>
+            <ItemSuggestion title="Javascript" onClick={() => setTextarea('Javascript')}/>
+            <ItemSuggestion title="Typescript" onClick={() => setTextarea('Typescript')}/>
           </details>
 
           <details open className="historic">
             <summary>Histórico</summary>
-            <ItemSuggestion title="Java" />
-            <ItemSuggestion title="PHP" />
+            <ItemSuggestion title="Java" onClick={() => setTextarea('Java')}/>
+            <ItemSuggestion title="PHP" onClick={() => setTextarea('PHP')}/>
           </details>
         </div>
 
