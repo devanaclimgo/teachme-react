@@ -1,12 +1,14 @@
 import { useState } from "react"
 import { ItemSuggestion } from "./components/ItemSuggestion"
 import { getHistoric, setHistoric } from "./storage/historic"
+import { sendMessage } from "./api/openai";
 
 type ProgressType = 'pending' | 'started' | 'done'
 
 type Message = {
   role: 'user' | 'assistant'
   content: string
+  subject?: string
 };
 
 function App() {
@@ -19,7 +21,7 @@ function App() {
     setChat([])
   }
 
-  function handleSubmitChat() {
+  async function handleSubmitChat() {
     if (!textarea) {
       return
     }
@@ -29,16 +31,23 @@ function App() {
 
     if (progress === 'pending') {
       setHistoric(message)
+
+      const prompt = `gere uma pergunta onde simule uma entrevista de embrego sobre ${message}, após gerar a pergunta, enviarei a resposta e você me dará um feedback. 
+      O feedback precisa ser simples e objetivo e corresponder fielmente a resposta eviada. 
+      Após o feedback não existirá mais interação.`
+
       const messageGPT: Message = {
         role: 'user',
-        content: message
+        content: prompt,
+        subject: message
       }
 
 
       setChat(text => [...text, messageGPT])
 
-      // fazer a chamada  pra API da openai 
-      setChat(text => [...text, { role: 'assistant', content: 'Aqui será a pergunta gerada por uma IA.'}])
+      const questionGPT: Message = await sendMessage([messageGPT])
+
+      setChat(text => [...text, { role: 'assistant', content: questionGPT.content}])
 
       setProgress('started')
       return
@@ -49,10 +58,12 @@ function App() {
       content: message
     }
 
+    
+    const feedbackGPT: Message = await sendMessage([...chat, responseUser])
+    
     setChat(text => [...text, responseUser])
-
-    // fazer a chamada  pra API da openai 
-    setChat(text => [...text, { role: 'assistant', content: 'Aqui será a pergunta gerada por uma IA.'} ])
+    
+    setChat(text => [...text, { role: 'assistant', content: feedbackGPT.content} ])
 
     setProgress('done')
   }
@@ -94,7 +105,7 @@ function App() {
           {progress !== 'pending' && (
             <div className="box-chat">
               {chat[0] && (
-                <h1>Você está estudando sobre <span>{chat[0].content}</span></h1>
+                <h1>Você está estudando sobre <span>{chat[0].subject}</span></h1>
               )}
 
               {chat[1] && (
