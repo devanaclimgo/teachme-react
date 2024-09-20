@@ -2,6 +2,7 @@ import { useState } from "react"
 import { ItemSuggestion } from "./components/ItemSuggestion"
 import { getHistoric, setHistoric } from "./storage/historic"
 import { sendMessage } from "./api/openai";
+import { ThreeDots } from "react-loader-spinner";
 
 type ProgressType = 'pending' | 'started' | 'done'
 
@@ -15,6 +16,7 @@ function App() {
   const [progress, setProgress] = useState<ProgressType>('pending')
   const [textarea, setTextarea] = useState<string>('')
   const [chat, setChat] = useState<Message[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
 
   function resetChat() {
     setProgress('pending')
@@ -45,25 +47,23 @@ function App() {
 
 
       setChat(text => [...text, messageGPT])
-
+      setLoading(true)
       const questionGPT: Message = await sendMessage([messageGPT])
-
-      setChat(text => [...text, { role: 'assistant', content: questionGPT.content}])
-
+      setChat(text => [...text, { role: 'assistant', content: questionGPT.content }])
+      setLoading(false)
       return
     }
 
     const responseUser: Message = {
-      role: 'user', 
+      role: 'user',
       content: message
     }
 
     setChat(text => [...text, responseUser])
-    
+    setLoading(true)
     const feedbackGPT: Message = await sendMessage([...chat, responseUser])
-    
-    setChat(text => [...text, { role: 'assistant', content: feedbackGPT.content} ])
-
+    setChat(text => [...text, { role: 'assistant', content: feedbackGPT.content }])
+    setLoading(false)
     setProgress('done')
   }
 
@@ -73,17 +73,17 @@ function App() {
         <div className="sidebar">
           <details open className="suggestion">
             <summary>Tópicos Sugeridos</summary>
-            <ItemSuggestion title="HTML" onClick={() => setTextarea('HTML')}/>
-            <ItemSuggestion title="CSS" onClick={() => setTextarea('CSS')}/>
-            <ItemSuggestion title="Javascript" onClick={() => setTextarea('Javascript')}/>
-            <ItemSuggestion title="Typescript" onClick={() => setTextarea('Typescript')}/>
+            <ItemSuggestion title="HTML" onClick={() => setTextarea('HTML')} />
+            <ItemSuggestion title="CSS" onClick={() => setTextarea('CSS')} />
+            <ItemSuggestion title="Javascript" onClick={() => setTextarea('Javascript')} />
+            <ItemSuggestion title="Typescript" onClick={() => setTextarea('Typescript')} />
           </details>
 
           <details open className="historic">
             <summary>Histórico</summary>
             {
               getHistoric().map(item => (
-                <ItemSuggestion title={item} onClick={() => setTextarea(item)}/>
+                <ItemSuggestion title={item} onClick={() => setTextarea(item)} />
               ))
             }
 
@@ -133,16 +133,30 @@ function App() {
             </div>
           )}
 
+          {
+            loading && (
+              <ThreeDots
+                visible={true}
+                height="30"
+                width="60"
+                color="#d6409f"
+                radius="9"
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{ margin: '30px auto' }}
+              />
+            )
+          }
+
           {progress !== 'done' && (
             <div className="box-input">
-            <textarea
-              value={textarea}
-              onChange={element => setTextarea(element.target.value)}
-              placeholder={
-                progress === 'started' ? "Insira sua resposta..." : "Insira o tema que deseja estudar..."
-              } />
-            <button onClick={handleSubmitChat}>{progress === 'pending' ? "Enviar Pergunta" : "Enviar resposta"}</button>
-          </div>
+              <textarea
+                value={textarea}
+                onChange={element => setTextarea(element.target.value)}
+                placeholder={
+                  progress === 'started' ? "Insira sua resposta..." : "Insira o tema que deseja estudar..."
+                } />
+              <button onClick={handleSubmitChat}>{progress === 'pending' ? "Enviar Pergunta" : "Enviar resposta"}</button>
+            </div>
           )}
 
           <footer className="box-footer">
