@@ -35,7 +35,7 @@ function App() {
       setHistoric(message)
       setProgress('started')
 
-      const prompt = `gere uma pergunta onde simule uma entrevista de embrego sobre ${message}, após gerar a pergunta, enviarei a resposta e você me dará um feedback. 
+      const prompt = `gere uma pergunta onde simule uma entrevista de emprego sobre ${message}, após gerar a pergunta, enviarei a resposta e você me dará um feedback. 
       O feedback precisa ser simples e objetivo e corresponder fielmente a resposta eviada. 
       Após o feedback não existirá mais interação.`
 
