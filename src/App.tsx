@@ -109,7 +109,7 @@ function App() {
 
               {chat[1] && (
                 <div className="question">
-                  <h2><img src="./assets/question.svg" alt="Ícone interrogação" />Pergunta</h2>
+                  <h2>❔ Pergunta</h2>
                   <p>{chat[1].content}</p>
                 </div>
               )}
