@@ -1,7 +1,7 @@
 import { useState } from "react"
-import { ItemSuggestion } from "./components/ItemSuggestion"
-import { getHistoric, setHistoric } from "./storage/historic"
-import { sendMessage } from "./api/openai";
+import { ItemSuggestion } from "./components/ItemSuggestion.tsx"
+import { getHistoric, setHistoric } from "./storage/historic.ts"
+import { sendMessage } from "./api/openai.ts";
 import { ThreeDots } from "react-loader-spinner";
 
 type ProgressType = 'pending' | 'started' | 'done'
@@ -109,7 +109,7 @@ function App() {
 
               {chat[1] && (
                 <div className="question">
-                  <h2><img src="./assets/question.svg" alt="Ícone interrogação" />Perguntas</h2>
+                  <h2><img src="./assets/question.svg" alt="Ícone interrogação" />Pergunta</h2>
                   <p>{chat[1].content}</p>
                 </div>
               )}
