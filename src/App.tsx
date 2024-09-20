@@ -31,6 +31,7 @@ function App() {
 
     if (progress === 'pending') {
       setHistoric(message)
+      setProgress('started')
 
       const prompt = `gere uma pergunta onde simule uma entrevista de embrego sobre ${message}, após gerar a pergunta, enviarei a resposta e você me dará um feedback. 
       O feedback precisa ser simples e objetivo e corresponder fielmente a resposta eviada. 
@@ -49,7 +50,6 @@ function App() {
 
       setChat(text => [...text, { role: 'assistant', content: questionGPT.content}])
 
-      setProgress('started')
       return
     }
 
@@ -58,10 +58,9 @@ function App() {
       content: message
     }
 
+    setChat(text => [...text, responseUser])
     
     const feedbackGPT: Message = await sendMessage([...chat, responseUser])
-    
-    setChat(text => [...text, responseUser])
     
     setChat(text => [...text, { role: 'assistant', content: feedbackGPT.content} ])
 
